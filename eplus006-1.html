@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>イープラス</title>
+
+  <link rel="apple-touch-icon" href="1255.png">
+  <link rel="manifest" href="manifest.json">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- 外部CSS読み込み -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+<!-- ページ1 -->
+<div id="page1">
+  <img src="button_glow_loop.gif" id="glowButton" class="img-full" alt="光るボタン">
+  <img src="eplus006-1.jpg" id="mainImage" class="img-full" alt="スタート画像">
+</div>
+
+<!-- ページ2 -->
+<div id="page2">
+
+  <!-- Aページ -->
+  <div id="pageA">
+   <a href="#" class="upper">
+     <img src="maisu_choice.png" alt="Upper Image">
+   </a>
+
+    <p class="time">リアルタイム時計</p>
+
+    <div id="banner">
+      <div id="banner-back"></div>
+      <img id="banner-front" src="top.jpg" alt="スライド画像">
+      <img id="attention" src="attention.png" alt="注意">
+    </div>
+
+    <img id="bottom" src="eplus006-2.jpg" alt="Bottom Image">
+  </div>
+
+  <!-- Bページ -->
+  <div id="pageB" style="display:none; background:white;">
+    <a href="eplus006-4.html">
+      <img class="upper" src="maisu_choice.png" alt="Upper Image">
+    </a>
+
+    <p class="time">リアルタイム時計</p>
+
+    <div id="banner-b">
+      <div id="banner-back-b"></div>
+      <img id="banner-front-b" src="top.jpg" alt="Banner Image">
+      <img id="banner-overlay" src="use.png" alt="Overlay Image">
+    </div>
+
+    <div id="ticket">
+      <img src="eplus006-3.jpg" alt="チケット画像">
+      <div id="datetime-overlay"></div>
+    </div>
+  </div>
+
+</div>
+
+  <!-- 外部JavaScript読み込み -->
+  <script src="script.js"></script>
+</body>
+</html>
