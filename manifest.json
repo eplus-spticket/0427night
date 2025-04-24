@@ -1,0 +1,15 @@
+{
+  "name": "イープラス",
+  "short_name": "イープラス",
+  "start_url": "https://eplus-spticket.github.io/0427night/list.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "https://niimurayousei.com/upapp/1255.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

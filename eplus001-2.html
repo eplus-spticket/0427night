@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>スライド切替版（新Bページ対応）</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-weight: bold;
+      font-family: Arial, "Yu Gothic", "游ゴシック体", "Meiryo", "メイリオ", sans-serif;
+      font-size: clamp(115%, 3vw, 195%);
+    }
+
+    /* 共通 */
+    #upper {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    #time {
+      width: 100%;
+      color: white;
+      background-color: #32A7B3;
+      text-align: center;
+      padding: 1px 0;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Aページ用 */
+    #pageA {
+      display: block;
+    }
+    #banner {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1179/492;
+      overflow: hidden;
+      background: #eee;
+    }
+
+
+#banner-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 38px 38px 0 0;
+  z-index: 1;
+
+  background:
+    /* 上部マスク（5.3%までグレー） */
+    linear-gradient(to bottom, #F2F2F2 0%, #F2F2F2 5.3%, transparent 5.3%),
+    
+    /* 左右2%を白に、それ以外を透明 */
+    linear-gradient(to right,
+      #F2F2F2 0%,
+      #F2F2F2 2%,
+      transparent 2%,
+      transparent 98%,
+      #F2F2F2 98%,
+      #F2F2F2 100%
+    ),
+    
+    /* メインカラー背景（スライドで変化） */
+    var(--banner-color, #3789C3);
+
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-blend-mode: normal; /* ← lighten をやめて干渉を防止 */
+}
+
+
+
+
+
+
+    #banner-front {
+      will-change: transform;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      touch-action: pan-x;
+      transition: transform 0.3s ease-out;
+      z-index: 2;
+    }
+    #attention {
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      width: 90%;
+      height: auto;
+      opacity: 0;
+      transition: none;
+      transform: translateX(-50%);
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+#bottom {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+    /* Bページ用 */
+    #pageB {
+      display: none;
+      background: white;
+    }
+    #banner-b {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 750/312;
+      overflow: hidden;
+    }
+    #banner-back-b {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #87ceeb;
+    }
+    #banner-front-b {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: auto;
+      touch-action: pan-x;
+      transition: transform 0.3s ease-out;
+    }
+    #banner-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 1;
+      transition: opacity 1s ease;
+      pointer-events: none;
+    }
+    #ticket {
+      position: relative;
+      width: 100%;
+    }
+    #ticket img {
+      width: 100%;
+      display: block;
+    }
+    #datetime-overlay {
+      position: absolute;
+      bottom: 70.5%;
+      left: 33.0%;
+      transform: translateX(-50%);
+      font-family: "BIZ UDPGothic", "Yu Gothic Medium", "游ゴシック Medium", "Yu Gothic", "游ゴシック体", "Meiryo", "メイリオ", sans-serif;
+      font-size: 3.5vw;
+      font-weight: normal;
+      color: black;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Aページ -->
+<div id="pageA">
+  <a href="eplus001-1.html">
+    <img id="upper" src="maisu_choice.png" alt="Upper Image">
+  </a>
+
+  <p id="time">リアルタイム時計</p>
+
+  <div id="banner">
+    <div id="banner-back"></div>
+    <img id="banner-front" src="top.jpg" alt="スライド画像">
+    <img id="attention" src="attention.png" alt="注意">
+  </div>
+
+  <img id="bottom" src="eplus001-2.jpg" alt="Bottom Image">
+</div>
+
+<!-- Bページ -->
+<div id="pageB">
+  <a href="eplus001-4.html">
+    <img id="upper" src="maisu_choice.png" alt="Upper Image">
+  </a>
+
+  <p id="time">リアルタイム時計</p>
+
+  <div id="banner-b">
+    <div id="banner-back-b"></div>
+    <img id="banner-front-b" src="top.jpg" alt="Banner Image">
+    <img id="banner-overlay" src="use.png" alt="Overlay Image">
+  </div>
+
+  <div id="ticket">
+    <img src="eplus001-3.jpg" alt="チケット画像">
+    <div id="datetime-overlay"></div>
+  </div>
+</div>
+
+<!-- スクリプト（時計・使用日時・スライド処理） -->
+<script>
+(function(d){
+  const timeBars = d.querySelectorAll('#time');  // 上の水色バー（AページもBページも両方）
+  const datetimeOverlay = d.getElementById('datetime-overlay'); // チケット上の日時
+  const weekDays = ["日", "月", "火", "水", "木", "金", "土"];
+
+  // チケット用：ページ読み込み時の固定時刻
+  const fixedDate = new Date();
+  const fixedWeek = weekDays[fixedDate.getDay()];
+  const datetimeText = '使用日時: ' + fixedDate.getFullYear() + '/' +
+                       ('0' + (fixedDate.getMonth() + 1)).slice(-2) + '/' +
+                       ('0' + fixedDate.getDate()).slice(-2) + '(' + fixedWeek + ') ' +
+                       ('0' + fixedDate.getHours()).slice(-2) + ':' +
+                       ('0' + fixedDate.getMinutes()).slice(-2);
+  datetimeOverlay.textContent = datetimeText;
+
+  // リアルタイム時計（上のバー）
+  function updateTimeBar() {
+    const now = new Date();
+    const nowWeek = weekDays[now.getDay()];
+    let milliseconds = Math.floor(now.getMilliseconds() / 10);
+    milliseconds = ('0' + milliseconds).slice(-2);
+
+    const timeText = now.getFullYear() + '/' +
+                     ('0' + (now.getMonth() + 1)).slice(-2) + '/' +
+                     ('0' + now.getDate()).slice(-2) + ' (' + nowWeek + ') ' +
+                     ('0' + now.getHours()).slice(-2) + ':' +
+                     ('0' + now.getMinutes()).slice(-2) + ':' +
+                     ('0' + now.getSeconds()).slice(-2) + '.' +
+                     milliseconds;
+
+    timeBars.forEach(p => p.textContent = timeText);
+    requestAnimationFrame(updateTimeBar);
+  }
+
+  requestAnimationFrame(updateTimeBar);
+}(document));
+
+// スライド・フェード演出
+let startX = 0;
+let startY = 0;
+let deltaX = 0;
+let isSwiping = false;
+const bannerFront = document.getElementById('banner-front');
+const bannerBack = document.getElementById('banner-back');
+const attention = document.getElementById('attention');
+const swipeThreshold = 100;
+const colors = ["#3789C3", "#459CA6", "#439F88", "#95C47E", "#F6EE72", "#E65958"];
+const colorStepSize = 50;
+
+bannerFront.addEventListener('touchstart', function(e) {
+  const touch = e.touches[0];
+  startX = touch.clientX;
+  startY = touch.clientY;
+  deltaX = 0;
+  isSwiping = true;
+  bannerFront.style.transition = "none";
+
+  bannerFront.src = "gate.gif";
+  attention.style.opacity = 1;
+}, { passive: true });
+
+bannerFront.addEventListener('touchmove', function(e) {
+  if (!isSwiping) return;
+  const touch = e.touches[0];
+  deltaX = touch.clientX - startX;
+  const deltaY = touch.clientY - startY;
+
+  if (Math.abs(deltaX) > Math.abs(deltaY)) {
+    e.preventDefault();
+  }
+
+  bannerFront.style.transform = `translateX(${deltaX}px)`;
+  const colorIndex = Math.min(Math.floor(Math.abs(deltaX) / colorStepSize), colors.length - 1);
+  bannerBack.style.setProperty('--banner-color', colors[colorIndex]);
+}, { passive: false });
+
+bannerFront.addEventListener('touchend', function(e) {
+  isSwiping = false;
+
+  if (Math.abs(deltaX) > swipeThreshold) {
+    // スワイプ成功：ページ切り替え
+    document.getElementById('pageA').style.display = 'none';
+    document.getElementById('pageB').style.display = 'block';
+
+    // use.pngフェードアウト
+    const overlay = document.getElementById('banner-overlay');
+    overlay.style.opacity = '1';
+    overlay.style.display = 'block';
+    setTimeout(function() {
+      overlay.style.opacity = '0';
+      setTimeout(function() {
+        overlay.style.display = 'none';
+      }, 1000);
+    }, 700);
+
+  } else {
+    // スワイプ失敗：元に戻す
+    bannerFront.style.transition = "transform 0.3s ease-out";
+    bannerFront.style.transform = "translateX(0)";
+    bannerBack.style.setProperty('--banner-color', colors[0]);
+
+    bannerFront.src = "top.jpg";
+    attention.style.opacity = 0;
+  }
+}, { passive: true });
+</script>
+
+</body>
+</html>

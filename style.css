@@ -1,0 +1,168 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  font-family: "Helvetica Neue", "Arial", sans-serif;
+}
+
+.img-full {
+  display: block;
+  width: 100%;
+  cursor: pointer;
+}
+
+#page1, #page2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+#page1 {
+  z-index: 1;
+}
+
+#page2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+  background: #F2F2F2;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  pointer-events: none;
+  display: none; /* ← 初期状態は完全に非表示 */
+}
+
+#page2.visible {
+  display: block;
+}
+
+#page2.active {
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Aページバナー */
+#banner {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1179/492;
+  background: #eee;
+  border-radius: 38px 38px 0 0; /* ★角丸 */
+  /* overflow: hidden; ← 付けない！！ */
+}
+
+#banner-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 38px 38px 0 0; /* ★背景も丸くする！ */
+  background:
+    linear-gradient(to bottom, #F2F2F2 0%, #F2F2F2 5.3%, transparent 5.3%),
+    linear-gradient(to right, #F2F2F2 0%, #F2F2F2 2%, var(--banner-color, #3789C3) 2%, var(--banner-color, #3789C3) 98%, #F2F2F2 98%, #F2F2F2 100%),
+    var(--banner-color, #3789C3);
+  z-index: 1;
+}
+
+#banner-front {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+  touch-action: pan-x;
+  transition: transform 0.3s ease-out;
+  z-index: 2;
+}
+
+#attention {
+  position: fixed;
+  top: 2.0px;
+  left: 50%;
+  width: 90%;
+  opacity: 0;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* 時計 */
+.time {
+  width: 100%;
+  color: white;
+  background-color: #32A7B3;
+  text-align: center;
+  padding: 2.4px 0;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: bold;
+  letter-spacing: 0.06em;
+  font-size: clamp(102%, 2.0vw, 195%);
+}
+
+/* Bページバナー */
+#banner-b {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 750/312;
+  overflow: hidden;
+}
+
+#banner-back-b {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #87ceeb;
+}
+
+#banner-front-b {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#banner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 1;
+  transition: opacity 1s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+#bottom, #ticket img {
+  width: 100%;
+}
+
+#datetime-overlay {
+  position: absolute;
+  bottom: 49.3%;
+  left: 33.0%;
+  transform: translateX(-50%);
+  font-family: "BIZ UDPGothic", "Yu Gothic Medium", "游ゴシック Medium", "Yu Gothic", "游ゴシック体", "Meiryo", "メイリオ", sans-serif;
+  font-size: 3.5vw;
+  color: black;
+  white-space: nowrap;
+}

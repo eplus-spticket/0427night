@@ -1,0 +1,76 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  font-family: "Helvetica Neue", "Arial", sans-serif;
+}
+
+
+/* 時計 */
+.time {
+  width: 100%;
+  color: white;
+  background-color: #32A7B3;
+  text-align: center;
+  padding: 2.4px 0;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: bold;
+  letter-spacing: 0.06em;
+  font-size: clamp(102%, 2.0vw, 195%);
+}
+
+
+img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+#bottom, #ticket img {
+  width: 100%;
+}
+
+#datetime-overlay {
+  position: absolute;
+  bottom: 49.5%;
+  left: 33.0%;
+  transform: translateX(-50%);
+  font-family: "BIZ UDPGothic", "Yu Gothic Medium", "游ゴシック Medium", "Yu Gothic", "游ゴシック体", "Meiryo", "メイリオ", sans-serif;
+  font-size: 3.5vw;
+  color: black;
+  white-space: nowrap;
+}
+
+
+#page3 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 3;
+  background: #F2F2F2;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  pointer-events: none;
+  display: none;
+}
+
+#page3.visible {
+  display: block;
+}
+
+#page3.active {
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+
+
+
+
+
+
+
